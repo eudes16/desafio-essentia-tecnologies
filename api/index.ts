@@ -1,3 +1,4 @@
-import { startServer } from './src/http/server';
+import { HttpServer } from "./src/http/server";
 
-startServer();
+const server = new HttpServer();
+server.start();

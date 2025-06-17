@@ -1,26 +1,27 @@
-import express from 'express';
+import express from "express";
+import { env } from "../config/env";
+import RoutesRegister from "./routes";
+import type AppContext from "../shared/AppContext";
 
-import { env } from '../config/env';
 
-export const createServer = () => {
-    const app = express();
+export class HttpServer {
+    private app = express();
 
-    // Middleware to parse JSON bodies
-    app.use(express.json());
+    constructor() {
+        const appContext: AppContext = {
+            appName: env.appName,
+            appVersion: env.version,
+        }
 
-    // Example route
-    app.get('/', (req, res) => {
-        res.send('Hello, World!');
-    });
-    
-    return app;
-}
+        this.app.use(express.json());
+        this.app.use("/api", new RoutesRegister(appContext).registerRoutes());
 
-export const startServer = () => {
-    const app = createServer();
-    const port = env.port;
 
-    app.listen(port, () => {
-        console.log(`Server is running on http://${env.host}:${env.port}`);
-    });
+    }
+
+    public async start() {
+        this.app.listen(env.port, () => {
+            console.log(`🚀 Server running at http://${env.host}:${env.port}/api`);
+        });
+    }
 }

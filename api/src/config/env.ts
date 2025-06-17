@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const env = {
-  host: process.env.HOST || "localhost",
-  port: parseInt(process.env.PORT || "3000", 10),
+    version: process.env.APP_VERSION || "1.0.0",
+    appName: process.env.APP_NAME || "Application",
+    host: process.env.APP_HOST || "localhost",
+    port: parseInt(process.env.APP_PORT || "4000", 10),
 };
