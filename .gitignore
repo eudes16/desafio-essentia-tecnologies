@@ -1,0 +1,56 @@
+### Api Project ################################################
+# dependencies (bun install)
+api/node_modules
+
+# output
+api/out
+api/dist
+api/*.tgz
+
+# code coverage
+api/coverage
+api/*.lcov
+
+# logs
+api/logs
+
+# dotenv environment variable files
+api/.env
+api/.env.development.local
+api/.env.test.local
+api/.env.production.local
+api/.env.local
+
+### App Project ################################################
+# dependencies (bun install)
+app/node_modules
+
+# output
+app/out
+app/dist
+app/*.tgz
+
+# code coverage
+app/coverage
+app/*.lcov
+
+# logs
+app/logs
+
+# dotenv environment variable files
+app/.env
+app/.env.development.local
+app/.env.test.local
+app/.env.production.local
+app/.env.local
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
+.DS_Store
