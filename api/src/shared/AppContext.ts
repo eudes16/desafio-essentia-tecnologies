@@ -1,3 +1,5 @@
+import type { PrismaClient } from "@prisma/client/extension";
+
 export default interface AppContext {
     /**
      * The name of the application.
@@ -8,4 +10,6 @@ export default interface AppContext {
      * The version of the application.
      */
     appVersion: string;
+
+    bdClient: PrismaClient;
 }
