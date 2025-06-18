@@ -2,7 +2,7 @@ import express from "express";
 import { env } from "../config/env";
 import RoutesRegister from "./routes";
 import type AppContext from "../shared/AppContext";
-
+import prismaClient from "../shared/db/prismaClient";
 
 export class HttpServer {
     private app = express();
@@ -11,11 +11,11 @@ export class HttpServer {
         const appContext: AppContext = {
             appName: env.appName,
             appVersion: env.version,
+            bdClient: prismaClient,
         }
 
         this.app.use(express.json());
         this.app.use("/api", new RoutesRegister(appContext).registerRoutes());
-
 
     }
 

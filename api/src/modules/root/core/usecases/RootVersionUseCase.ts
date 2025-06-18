@@ -5,7 +5,9 @@ import type { UseCase } from "../../../../shared/UseCase";
 import type RootOut from "../domain/RootOut";
 
 export default class RootVersionUseCase implements UseCase<DataRequest, DataResponse<RootOut>> {
-    async execute(input: DataRequest<any>, context: AppContext): Promise<DataResponse<RootOut>> {
+    async execute(context: AppContext, input: DataRequest<any>): Promise<DataResponse<RootOut>> {
+
+        console.log(input);
 
         const response: DataResponse<RootOut> = {
             status: true,
