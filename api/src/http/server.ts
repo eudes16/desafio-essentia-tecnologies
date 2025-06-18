@@ -12,6 +12,8 @@ export class HttpServer {
             appName: env.appName,
             appVersion: env.version,
             bdClient: prismaClient,
+            jwtSecret: env.jwtSecret,
+            jwtExpiration: env.jwtExpiration,
         }
 
         this.app.use(express.json());
@@ -20,7 +22,7 @@ export class HttpServer {
     }
 
     public async start() {
-        this.app.listen(env.port, () => {
+        await this.app.listen(env.port, () => {
             console.log(`🚀 Server running at http://${env.host}:${env.port}/api`);
         });
     }

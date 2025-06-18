@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import HttpStatus from "../HttpStatus";
 import { validateToken } from "../jwt/validateToken";
+import { TokenExpiredError } from "jsonwebtoken";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization;
@@ -12,10 +13,15 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const [_, token = ''] = authHeader.split(' ');
 
     try {
-        const decoded = await validateToken(token, process.env.JWT_SECRET as string);
+        const decoded = await validateToken(token, process.env.APP_JWT_SECRET as string);
         (req as any).user = decoded;
         next();
     } catch (err) {
+        if (err instanceof TokenExpiredError) {
+            res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Token expired.' });
+            return;
+        }
+        console.error('Token validation error:', err);
         res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid token.' });
         return;
     }

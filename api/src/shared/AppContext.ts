@@ -12,4 +12,8 @@ export default interface AppContext {
     appVersion: string;
 
     bdClient: PrismaClient;
+
+    jwtSecret: string;
+
+    jwtExpiration: string;
 }
