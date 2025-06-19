@@ -1,4 +1,4 @@
-import { Router, type NextFunction, type Request, type Response } from "express";
+import { Router, type Request, type Response } from "express";
 import RootController from "../modules/root/interface/RootController";
 import RootRoutes from "../modules/root/interface/RootRoutes";
 import type AppContext from "../shared/AppContext";

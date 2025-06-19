@@ -40,5 +40,33 @@ export default class AuthRepository implements Repository {
         }
         return result;
     }
+
+    async logout(token: string, ): Promise<boolean> {
+        const session = await this.dbCliente.session.findFirst({
+            where: {
+                token: token as string,
+            }
+        });
+
+        if (!session) {
+            return false;
+        }
+
+        const result = await this.dbCliente.session.update({
+            data: {
+                deletedAt: new Date(),
+            },
+            where: {
+                id: session.id,
+            }
+        });
+
+        if (result) {
+            return true;
+        }
+
+        return false;
+    }
+
     
 } 

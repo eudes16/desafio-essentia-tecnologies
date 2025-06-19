@@ -1,5 +1,4 @@
 import { PrismaClient } from "../../generated/client"
-import resolveParams from "../../http/resolveParams"
 
 const log = (process.env.ERROR_LOG?.replace(/\s/g, "")?.split(',') || []) as any
 

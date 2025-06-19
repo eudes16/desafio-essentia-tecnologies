@@ -9,5 +9,20 @@ export default interface Repository {
      */
     authenticate(email: string, password: string): Promise<User | null>;
 
+    /**
+     * Saves a session for a user.
+     * @param session - The session object containing userId, expiresAt, and token.
+     * @returns A promise that resolves to the saved session or null if saving failed.
+     */
     saveSession(session: Session): Promise<Session | null>;
+
+    /**
+     * Logs out a user by invalidating their session.
+     * @param token - The session token to invalidate.
+     * @param userId - The ID of the user to log out.
+     * @returns A promise that resolves to a boolean indicating success or failure.
+     */
+    logout(token: string): Promise<boolean>;
+
+
 }
