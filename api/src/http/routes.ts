@@ -15,11 +15,11 @@ export default class RoutesRegister {
         // Public Routes
         new RootRoutes(new RootController(
             this.context
-        ), router).addRoutes();
+        ), router);
 
         new AuthRoutes(new AuthController(
             this.context
-        ), router).addRoutes();
+        ), router);
 
         // Protected Routes
         router.use(authMiddleware); 

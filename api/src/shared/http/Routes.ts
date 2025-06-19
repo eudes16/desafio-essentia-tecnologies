@@ -1,6 +1,6 @@
 import type { Router } from "express";
-import type { BaseController } from "./BaseController";
-import type AppContext from "./AppContext";
+import type { BaseController } from "../BaseController";
+import type AppContext from "../AppContext";
 
 export abstract class Routes {
     _router: Router;

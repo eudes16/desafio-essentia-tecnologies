@@ -1,10 +1,8 @@
-import type DataRequest from "./DataRequest";
-
-export default abstract class Service<IN = any> {
+export default abstract class Service<IN> {
     
-    dataRequest: DataRequest<IN>;
+    dataRequest: IN;
 
-    constructor(dataRequest: DataRequest<IN>) {
+    constructor(dataRequest: IN) {
         this.dataRequest = dataRequest;
     }
 }

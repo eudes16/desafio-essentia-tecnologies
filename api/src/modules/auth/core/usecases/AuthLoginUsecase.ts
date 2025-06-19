@@ -8,18 +8,20 @@ import type { Session } from "../../../../generated/client";
 import type AuthCreateSession from "../domain/AuthCreateSession";
 import { validateToken } from "../../../../shared/jwt/validateToken";
 import moment from "moment";
+import type DataRequest from "../../../../shared/http/DataRequest";
+import type DataResponse from "../../../../shared/http/DataResponse";
 
 /**
  * AuthLoginUsecase is responsible for handling user authentication.
  * It implements the UseCase interface with AuthIn as input and AuthTokenOut as output.
  */
-export default class AuthLoginUsecase implements UseCase<AuthIn, AuthTokenOut> {
+export default class AuthLoginUsecase implements UseCase<DataRequest<AuthIn>, DataResponse<AuthTokenOut | null>> {
     constructor(private repository: Repository) {
         this.repository = repository;   
     }
 
-    async execute(context: AppContext, input: AuthIn): Promise<AuthTokenOut> {
-        const { email, password } = input;
+    async execute(context: AppContext, input: DataRequest<AuthIn>): Promise<DataResponse<AuthTokenOut | null>> {
+        const { email, password } = input.data;
         
 
         const authUser = await this.repository.authenticate(email, password);
@@ -29,7 +31,11 @@ export default class AuthLoginUsecase implements UseCase<AuthIn, AuthTokenOut> {
         }
 
         if (authUser.password !== password) {
-            throw new Error("Invalid password");
+            return {
+                status: false,
+                data: null,
+                message: "Invalid password" 
+            }
         }
 
         const payload = {
@@ -55,11 +61,18 @@ export default class AuthLoginUsecase implements UseCase<AuthIn, AuthTokenOut> {
         const sessionResult = await this.repository.saveSession(session as Session);
 
         if (!sessionResult) {
-            throw new Error("Failed to save session");
+            return {
+                status: false,
+                data: null,
+                message: "Failed to save session"   
+            }
         }
 
         return {
-            token, 
+            status: true,
+            data: {
+                token
+            }
         }
 
     }

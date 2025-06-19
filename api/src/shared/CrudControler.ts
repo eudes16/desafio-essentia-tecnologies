@@ -1,6 +1,6 @@
 import type { BaseController } from "./BaseController"
-import type DataRequest from "./DataRequest"
-import type DataResponse from "./DataResponse"
+import type DataRequest from "./http/DataRequest"
+import type DataResponse from "./http/DataResponse"
 
 export default interface CrudController extends BaseController {
     find: (request: DataRequest) => Promise<DataResponse>

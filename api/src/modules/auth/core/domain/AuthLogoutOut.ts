@@ -1,3 +1,3 @@
 export default interface AuthLogoutOut {
-    success: boolean
+    logout: boolean
 }

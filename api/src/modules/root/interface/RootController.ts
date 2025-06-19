@@ -1,29 +1,56 @@
 import type { Request, Response } from "express";
-import type Controller from "../../../shared/Controller";
 import RootVersionUseCase from "../core/usecases/RootVersionUseCase";
-import type DataRequest from "../../../shared/DataRequest";
-import HttpStatus from "../../../shared/HttpStatus";
+import type DataRequest from "../../../shared/http/DataRequest";
+import HttpStatus from "../../../shared/http/HttpStatus";
 import type AppContext from "../../../shared/AppContext";
 import RootService from "../service/RootService";
-import resolveParams from "../../../http/resolveParams";
+import type { BaseController } from "../../../shared/BaseController";
+import type DataResponse from "../../../shared/http/DataResponse";
+import { Exceptions } from "../../../shared/exceptions/Exceptions";
 
-export default class RootController implements Controller {
+export default class RootController implements BaseController {
 
-    constructor(public context: AppContext) {}
+    constructor(
+        public context: AppContext
+    ) {}
     
-    async execute(req: Request, res: Response) {
+    async execute(dataRequest: DataRequest): Promise<DataResponse> {
 
+        try {
+            const response = await new RootService(
+                this.context, 
+                dataRequest,
+            ).getAppVersion();
+            
+            if (!response.status) {
+                return {
+                    code: response.code || HttpStatus.NOT_FOUND,
+                    data: null
+                }
+            }
+    
+            return {
+                ...response,
+                code: response.code || HttpStatus.OK,
+            };
 
-        const request: DataRequest = {
-            data: resolveParams(req)
+        } catch (error) {
+
+            if (error instanceof Exceptions) {
+                return {
+                    code: error.code,
+                    data: null,
+                    message: error.message
+                };
+            }
+            
+            console.log(error)
+
+            return {
+                code: HttpStatus.INTERNAL_SERVER_ERROR,
+                data: null,
+                message: "An unexpected error occurred"
+            };
         }
-
-        const response = await new RootService(this.context, new RootVersionUseCase(), request).getAppVersion();
-        
-        if (!response.status) {
-            res.status(response.code || HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-
-        res.json(response.data)
     }
 }

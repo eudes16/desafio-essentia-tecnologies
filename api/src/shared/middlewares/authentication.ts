@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import HttpStatus from "../HttpStatus";
+import HttpStatus from "../http/HttpStatus";
 import { validateToken } from "../jwt/validateToken";
 import { TokenExpiredError } from "jsonwebtoken";
 

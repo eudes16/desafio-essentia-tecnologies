@@ -1,6 +1,8 @@
 import type { Router } from "express";
-import { Routes } from "../../../shared/Routes";
 import type Controller from "../core/domain/Controller";
+import { Routes } from "../../../shared/http/Routes";
+import resolveParams from "../../../http/resolveParams";
+import HttpStatus from "../../../shared/http/HttpStatus";
 
 export default class AuthRoutes extends Routes {
     constructor(private controller: Controller, router: Router) {
@@ -8,10 +10,26 @@ export default class AuthRoutes extends Routes {
         this.addRoutes();
     }
 
-    addRoutes(): void {
-        this._router.post("/auth/login", this.controller.login.bind(this.controller));
+    async addRoutes(): Promise<void> {
+        await this._router.post("/auth/login", async (req, res) => {
+            const dataRequest = {
+                data: resolveParams(req),
+            }
 
-        this._router.post("/auth/logout", this.controller.logout.bind(this.controller));
+            const response = await this.controller.login(dataRequest)
+
+            await res.status(response.code || HttpStatus.BAD_REQUEST).json(response);
+        });
+
+        await this._router.post("/auth/logout", async (req, res) => {
+            const dataRequest = {
+                data: resolveParams(req),
+            }
+
+            const response = await this.controller.logout(dataRequest)
+
+            await res.status(response.code || HttpStatus.BAD_REQUEST).json(response);
+        });
 
         this._router.post("/auth/register", this.controller.register.bind(this.controller));
     }
