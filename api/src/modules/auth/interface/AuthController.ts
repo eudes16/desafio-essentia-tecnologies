@@ -1,11 +1,7 @@
-import type { Request, Response } from "express";
 import type AppContext from "../../../shared/AppContext";
-import AuthLoginUsecase from "../core/usecases/AuthLoginUsecase";
 import type AuthIn from "../core/domain/AuthIn";
-import AuthRepository from "../infraestructure/AuthRepository";
 import type Controller from "../core/domain/Controller";
 import type AuthLogoutIn from "../core/domain/AuthLogoutIn";
-import AuthLogoutUsecase from "../core/usecases/AuthLogoutUsecase";
 import HttpStatus from "../../../shared/http/HttpStatus";
 import type DataRequest from "../../../shared/http/DataRequest";
 import { Exceptions } from "../../../shared/exceptions/Exceptions";
