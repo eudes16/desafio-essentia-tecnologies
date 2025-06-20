@@ -6,6 +6,7 @@ import type Repository from "../domain/Repository";
 import type UserCreateIn from "../domain/UserCreateIn";
 import type UserOut from "../domain/UserOut";
 
+// Todo: corrigiar o generic type do DataResponse
 export default class UserCreateUsecase implements UseCase<DataRequest<UserCreateIn>, DataResponse<UserOut>> {
     constructor(private repository: Repository) {
         this.repository = repository;   

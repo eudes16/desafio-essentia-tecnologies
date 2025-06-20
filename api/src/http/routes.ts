@@ -7,6 +7,8 @@ import AuthRoutes from "../modules/auth/interface/AuthRoutes";
 import AuthController from "../modules/auth/interface/AuthController";
 import UserRoutes from "../modules/user/interface/UserRoutes";
 import UserController from "../modules/user/interface/UserController";
+import TodoController from "../modules/todo/interface/TodoController";
+import TodoRoutes from "../modules/todo/interface/TodoRoutes";
 
 export default class RoutesRegister {
     constructor(private context: AppContext) { }
@@ -27,6 +29,10 @@ export default class RoutesRegister {
         router.use(authMiddleware); 
 
         new UserRoutes(new UserController(
+            this.context
+        ), router);
+
+        new TodoRoutes(new TodoController(
             this.context
         ), router);
         

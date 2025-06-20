@@ -140,6 +140,19 @@ exports.Prisma.SessionScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.TodoScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  description: 'description',
+  dueDate: 'dueDate',
+  priority: 'priority',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -160,10 +173,27 @@ exports.Prisma.SessionOrderByRelevanceFieldEnum = {
   token: 'token'
 };
 
+exports.Prisma.TodoOrderByRelevanceFieldEnum = {
+  title: 'title',
+  description: 'description'
+};
+exports.TodoPriority = exports.$Enums.TodoPriority = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high'
+};
+
+exports.TodoStatus = exports.$Enums.TodoStatus = {
+  pending: 'pending',
+  in_progress: 'in_progress',
+  completed: 'completed',
+  cancelled: 'cancelled'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Session: 'Session'
+  Session: 'Session',
+  Todo: 'Todo'
 };
 
 /**

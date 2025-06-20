@@ -1,3 +1,4 @@
+import type AppContext from "../../../shared/AppContext";
 import type DataRequest from "../../../shared/http/DataRequest";
 import type DataResponse from "../../../shared/http/DataResponse";
 import Service from "../../../shared/Service";
@@ -11,7 +12,7 @@ export default class UserService extends Service<DataRequest<any>> {
     private repository: UserRepository;  
 
     constructor(
-        public context: any, 
+        public context: AppContext, 
         dataRequest: DataRequest<any>,
     ) {
         super(dataRequest);

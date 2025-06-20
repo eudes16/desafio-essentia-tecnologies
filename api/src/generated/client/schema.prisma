@@ -25,6 +25,7 @@ model User {
 
   // Relations
   sessions Session[]
+  todos    Todo[]
 }
 
 model Session {
@@ -38,4 +39,33 @@ model Session {
 
   // Relations
   user User @relation(fields: [userId], references: [id])
+}
+
+model Todo {
+  id          Int          @id @default(autoincrement())
+  userId      Int
+  title       String
+  description String?      @db.Text
+  dueDate     DateTime?
+  priority    TodoPriority @default(low)
+  status      TodoStatus   @default(pending)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime?    @updatedAt
+  deletedAt   DateTime?
+
+  // Relations
+  user User @relation(fields: [userId], references: [id])
+}
+
+enum TodoPriority {
+  low
+  medium
+  high
+}
+
+enum TodoStatus {
+  pending
+  in_progress
+  completed
+  cancelled
 }
