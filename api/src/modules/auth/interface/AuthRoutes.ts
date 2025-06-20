@@ -31,6 +31,14 @@ export default class AuthRoutes extends Routes {
             await res.status(response.code || HttpStatus.BAD_REQUEST).json(response);
         });
 
-        this._router.post("/auth/register", this.controller.register.bind(this.controller));
+        await this._router.post("/auth/register", async (req, res) => {
+            const dataRequest = {
+                data: resolveParams(req),
+            }
+
+            const response = await this.controller.register(dataRequest)
+
+            await res.status(response.code || HttpStatus.BAD_REQUEST).json(response);
+        });
     }
 }

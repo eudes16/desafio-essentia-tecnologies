@@ -1,4 +1,8 @@
 import type { PrismaClient, Session, User } from "../../../generated/client";
+import { Exceptions } from "../../../shared/exceptions/Exceptions";
+import HttpStatus from "../../../shared/http/HttpStatus";
+import type AuthUserOut from "../core/domain/AuthUserOut";
+import type AuthUserRegisterIn from "../core/domain/AuthUserRegisterIn";
 import type Repository from "../core/domain/Repository";
 
 export default class AuthRepository implements Repository {
@@ -7,6 +11,7 @@ export default class AuthRepository implements Repository {
         this.dbCliente = dbCliente;
 
     }
+    
 
     async authenticate(email: string, password: string): Promise<User | null> {
         
@@ -68,5 +73,38 @@ export default class AuthRepository implements Repository {
         return false;
     }
 
-    
+    async  register(user: AuthUserRegisterIn): Promise<AuthUserOut | null> {
+        const existingUser = await this.dbCliente.user.findUnique({
+            where: {
+                email: user.email,
+            },
+        });
+
+        if (existingUser) {
+            throw new Exceptions("User already exists with this email", HttpStatus.BAD_REQUEST);
+        }
+
+        const newUser = await this.dbCliente.user.create({
+            data: {
+                name: user.name,
+                email: user.email,
+                password: user.password, // Ensure to hash the password before saving in production
+            },
+        });
+
+        if (!newUser) {
+            throw new Exceptions("Failed to register user", HttpStatus.BAD_REQUEST);
+        }
+
+        return {
+            id: newUser.id,
+            email: newUser.email,
+            name: newUser.name!,
+            createdAt: newUser.createdAt,
+            updatedAt: newUser.updatedAt || undefined,
+            deletedAt: newUser.deletedAt || undefined,
+        };
+
+        
+    }
 } 

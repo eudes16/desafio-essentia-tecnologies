@@ -1,4 +1,6 @@
 import type { Session, User } from "../../../../generated/client";
+import type AuthUserOut from "./AuthUserOut";
+import type AuthUserRegisterIn from "./AuthUserRegisterIn";
 
 export default interface Repository {
     /**
@@ -24,5 +26,10 @@ export default interface Repository {
      */
     logout(token: string): Promise<boolean>;
 
-
+    /**
+     * Registers a new user with the provided registration details.
+     * @param user - The registration details of the user.
+     * @returns A promise that resolves to the created user or null if registration failed.
+     */
+    register(user: AuthUserRegisterIn): Promise<AuthUserOut | null>;
 }

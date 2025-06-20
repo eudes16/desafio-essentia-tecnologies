@@ -42,7 +42,7 @@ export default class UserController implements Controller {
 
             return {
                 ...response,
-                code: HttpStatus.OK,
+                code: HttpStatus.CREATED,
             }
             
         } catch (error) {

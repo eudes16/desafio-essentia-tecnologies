@@ -40,7 +40,7 @@ export default class TodoController implements Controller {
 
             return {
                 ...response,
-                code: HttpStatus.OK,
+                code: HttpStatus.CREATED,
             };
             
         } catch (error) {
