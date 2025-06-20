@@ -9,12 +9,16 @@ import UserRoutes from "../modules/user/interface/UserRoutes";
 import UserController from "../modules/user/interface/UserController";
 import TodoController from "../modules/todo/interface/TodoController";
 import TodoRoutes from "../modules/todo/interface/TodoRoutes";
+import { getDataToContext } from "../shared/middlewares/getDataToContext";
 
 export default class RoutesRegister {
     constructor(private context: AppContext) { }
 
-    registerRoutes(): Router {
+    async registerRoutes(): Promise<Router> {
         const router = Router();
+        
+        // Middleware to get data for context for each request
+        await router.use(getDataToContext);
         
         // Public Routes
         new RootRoutes(new RootController(
@@ -26,7 +30,7 @@ export default class RoutesRegister {
         ), router);
         
         // Protected Routes
-        router.use(authMiddleware); 
+        await router.use(authMiddleware); 
 
         new UserRoutes(new UserController(
             this.context
