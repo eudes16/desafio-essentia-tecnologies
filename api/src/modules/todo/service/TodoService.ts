@@ -8,6 +8,7 @@ import TodoCreateUsecase from "../core/usecases/TodoCreateUsecase";
 import TodoUpdateUsecase from "../core/usecases/TodoUpdateUsecase";
 import TodoDeleteUsecase from "../core/usecases/TodoDeleteUsecase";
 import TodoRepository from "../infraestructure/TodoRepository";
+import TodoFindUsecase from "../core/usecases/TodoFindUsecase";
 
 export default class TodoService extends Service<DataRequest<any>> {
     private repository: Repository;
@@ -19,9 +20,8 @@ export default class TodoService extends Service<DataRequest<any>> {
         this.repository = new TodoRepository(this.context.bdClient);
     }
 
-    async read(): Promise<TodoOut[]> {
-        // Implementation for reading todos
-        throw new Error("Method not implemented.");
+    async read(): Promise<DataResponse<TodoOut[]>> {
+        return await new TodoFindUsecase(this.repository).execute(this.context, this.dataRequest);
     }
 
     async create(): Promise<DataResponse<TodoOut | null>> {

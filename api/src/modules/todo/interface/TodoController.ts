@@ -14,8 +14,43 @@ export default class TodoController implements Controller {
 
     constructor(public context: AppContext) {}
 
-    find(dataRequest: DataRequest): Promise<any> {
-        throw new Error("Method not implemented.");
+    async find(dataRequest: DataRequest): Promise<DataResponse<TodoOut[]>> {
+        try {
+            const response = await new TodoService(
+                this.context,
+                dataRequest,
+            ).read();
+
+            if (response.status === false) {
+                return {
+                    code: response.code || HttpStatus.NOT_FOUND,
+                    data: [],
+                    message: response.message || "No todos found"
+                };
+            }
+
+            return {
+                ...response,
+                code: HttpStatus.OK,
+            };
+
+        } catch (error) {
+            if (error instanceof Exceptions) {
+                return {
+                    code: error.code,
+                    data: [],
+                    message: error.message
+                };
+            }
+
+            console.log(error)
+
+            return {
+                code: HttpStatus.INTERNAL_SERVER_ERROR,
+                data: [],
+                message: "An unexpected error occurred"
+            };
+        }
     }
 
     findById(dataRequest: DataRequest): Promise<any> {

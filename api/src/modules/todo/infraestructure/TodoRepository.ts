@@ -1,12 +1,15 @@
 import type { PrismaClient, Todo } from "../../../generated/client";
+import type QueryResult from "../../../shared/records/QueryResult";
+import resolveQueryFilters from "../../../shared/records/resolveQueryFilter";
 import type Repository from "../core/domain/Repository";
 import type TodoCreateIn from "../core/domain/TodoCreateIn";
 import type TodoDeleteIn from "../core/domain/TodoDeleteIn";
+import type TodoFindIn from "../core/domain/TodoFindIn";
 import type TodoOut from "../core/domain/TodoOut";
 import type TodoUpdateIn from "../core/domain/TodoUpdateIn";
 
 export default class TodoRepository implements Repository {
-    
+
     constructor(private dbCliente: PrismaClient) {
         this.dbCliente = dbCliente;
     }
@@ -18,7 +21,7 @@ export default class TodoRepository implements Repository {
     async create(data: TodoCreateIn): Promise<TodoOut | null> {
 
         const { title, description, priority, userId, dueDate } = data;
-        
+
         const todo = await this.dbCliente.todo.create({
             data: {
                 userId: userId,
@@ -48,10 +51,10 @@ export default class TodoRepository implements Repository {
         } as TodoOut;
 
     }
-    
+
     async update(data: TodoUpdateIn): Promise<TodoOut | null> {
         const update = { ...data }
-        
+
         // check if the id exists
         const todo = await this.dbCliente.todo.findUnique({
             where: {
@@ -135,4 +138,50 @@ export default class TodoRepository implements Repository {
         } as TodoOut;
     }
 
+
+    async find(data: TodoFindIn): Promise<QueryResult<TodoOut>> {
+        const { where: _where, pagination: _pagination } = resolveQueryFilters(data);
+
+
+        const whereQuery = {
+            ..._where
+        }
+
+        const whereCount = {
+            ..._where,
+        }
+
+
+        const [todos, count] = await this.dbCliente.$transaction([
+            this.dbCliente.todo.findMany({
+                where: {
+                    ...whereQuery,
+                },
+                skip: _pagination?.skip,
+                take: _pagination?.take,
+            }),
+            this.dbCliente.todo.count({
+                where: {
+                    ...whereCount,
+                }
+            })
+        ])
+
+
+        return {
+            results: todos.map((todo) => ({
+                id: todo.id,
+                userId: todo.userId,
+                title: todo.title,
+                description: todo.description,
+                priority: todo.priority,
+                status: todo.status,
+                dueDate: todo.dueDate,
+                createdAt: todo.createdAt,
+                updatedAt: todo.updatedAt || undefined,
+                deletedAt: todo.deletedAt || undefined,
+            }) as TodoOut),
+            totalCount: count,
+        };
+    }
 }

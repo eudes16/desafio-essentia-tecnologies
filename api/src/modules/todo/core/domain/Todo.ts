@@ -1,14 +1,14 @@
 export default interface Todo {
-   id: number;
+    id: number;
     userId: number;
     title: string;
     description?: string;
-    dueDate?:   Date;
-    priority:  TodoPriority;
-    status:   TodoStatus ;
+    dueDate?: Date;
+    priority: TodoPriority;
+    status: TodoStatus;
     createdAt: Date
     updatedAt?: Date | null;
-    deletedAt?: Date | null; 
+    deletedAt?: Date | null;
 }
 
 export enum TodoPriority {

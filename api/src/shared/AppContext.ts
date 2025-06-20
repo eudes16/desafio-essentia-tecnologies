@@ -16,4 +16,21 @@ export default interface AppContext {
     jwtSecret: string;
 
     jwtExpiration: string;
+
+    session?: SessionData;
+}
+
+export interface AuthenticatedUser {
+    id: number;
+    email: string;
+    name?: string;
+}
+
+export interface SessionData {
+    user: AuthenticatedUser;
+    token: string;
+    pagination?: {
+        page: number | null;
+        limit: number | null;
+    }
 }

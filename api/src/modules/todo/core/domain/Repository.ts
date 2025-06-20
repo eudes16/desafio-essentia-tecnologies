@@ -1,5 +1,7 @@
+import type QueryResult from "../../../../shared/records/QueryResult";
 import type TodoCreateIn from "./TodoCreateIn";
 import type TodoDeleteIn from "./TodoDeleteIn";
+import type TodoFindIn from "./TodoFindIn";
 import type TodoOut from "./TodoOut";
 import type TodoUpdateIn from "./TodoUpdateIn";
 
@@ -12,7 +14,6 @@ export default interface Repository {
      *  @returns The created todo item.
      */
     create(data: TodoCreateIn): Promise<TodoOut | null>;
-
 
     /**
      *  Delete a todo item.
@@ -31,5 +32,13 @@ export default interface Repository {
      *  @returns The updated todo item or null if it does not exist.
      */
     update(data: TodoUpdateIn): Promise<TodoOut | null>;
+
+    /**
+     *  Find a todo item by its ID.
+     *  This method will return the todo item if it exists, or null if it does not.
+     *  @param data - The ID of the todo item to find.
+     *  @returns The found todo item or null if it does not exist.
+     */
+    find(data: TodoFindIn): Promise<QueryResult<TodoOut>>;
 
 }

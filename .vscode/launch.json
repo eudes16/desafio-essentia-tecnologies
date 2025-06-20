@@ -21,7 +21,7 @@
             // If the program should be run in watch mode.
             // This is equivalent to passing `--watch` to the `bun` executable.
             // You can also set this to "hot" to enable hot reloading using `--hot`.
-            "watchMode": false,
+            "watchMode": true,
             // If the debugger should stop on the first line of the program.
             "stopOnEntry": false,
             // If the debugger should be disabled. (for example, breakpoints will not be hit)

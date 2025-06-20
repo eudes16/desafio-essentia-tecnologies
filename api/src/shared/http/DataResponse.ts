@@ -3,4 +3,5 @@ export default interface DataResponse<T = any> {
     message?: string;
     data?: T;
     code?: number;
+    count?: number;
 }

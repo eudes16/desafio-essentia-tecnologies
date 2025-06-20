@@ -19,6 +19,7 @@ const prismaClient = new PrismaClient({
                 }
                 return query(args)
             },
+            
         },
     },
 });

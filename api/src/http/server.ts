@@ -8,21 +8,26 @@ export class HttpServer {
     private app = express();
 
     constructor() {
+        this.app.use(express.json());
+    }
+
+    private async initRoutes(appContext: AppContext) {
+        const router = await new RoutesRegister(appContext).registerRoutes();
+        this.app.use("/api", router);
+    }
+
+    public async start() {
         const appContext: AppContext = {
             appName: env.appName,
             appVersion: env.version,
             bdClient: prismaClient,
             jwtSecret: env.jwtSecret,
             jwtExpiration: env.jwtExpiration,
-        }
+        };
+        
+        await this.initRoutes(appContext);
 
-        this.app.use(express.json());
-        this.app.use("/api", new RoutesRegister(appContext).registerRoutes());
-
-    }
-
-    public async start() {
-        await this.app.listen(env.port, () => {
+        this.app.listen(env.port, () => {
             console.log(`🚀 Server running at http://${env.host}:${env.port}/api`);
         });
     }
