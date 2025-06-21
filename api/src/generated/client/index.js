@@ -179,7 +179,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/eudes/desafios/essentia/todo/api/src/generated/client",
+      "value": "/Users/eudesvss/desafios/desafio-essentia-tecnologies/api/src/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -188,12 +188,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/eudes/desafios/essentia/todo/api/prisma/schema.prisma",
+    "sourceFilePath": "/Users/eudesvss/desafios/desafio-essentia-tecnologies/api/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -255,8 +255,8 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
-path.join(process.cwd(), "src/generated/client/libquery_engine-debian-openssl-3.0.x.so.node")
+path.join(__dirname, "libquery_engine-darwin-arm64.dylib.node");
+path.join(process.cwd(), "src/generated/client/libquery_engine-darwin-arm64.dylib.node")
 // file annotations for bundling tools to include these files
 path.join(__dirname, "schema.prisma");
 path.join(process.cwd(), "src/generated/client/schema.prisma")

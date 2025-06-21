@@ -178,7 +178,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/eudes/desafios/essentia/todo/api/src/generated/client",
+      "value": "/Users/eudesvss/desafios/desafio-essentia-tecnologies/api/src/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -187,12 +187,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/eudes/desafios/essentia/todo/api/prisma/schema.prisma",
+    "sourceFilePath": "/Users/eudesvss/desafios/desafio-essentia-tecnologies/api/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
