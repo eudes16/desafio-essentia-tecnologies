@@ -1,5 +1,4 @@
 import { Component, Input, Output } from '@angular/core';
-import { ColorType } from '../../../types';
 import { CommonModule } from '@angular/common';
 
 @Component({
