@@ -7,9 +7,9 @@ import generateToken from "../../../../shared/jwt/generateToken";
 import type { Session } from "../../../../generated/client";
 import type AuthCreateSession from "../domain/AuthCreateSession";
 import { validateToken } from "../../../../shared/jwt/validateToken";
-import moment from "moment";
 import type DataRequest from "../../../../shared/http/DataRequest";
 import type DataResponse from "../../../../shared/http/DataResponse";
+const crypto = require("crypto");
 
 /**
  * AuthLoginUsecase is responsible for handling user authentication.
@@ -17,25 +17,18 @@ import type DataResponse from "../../../../shared/http/DataResponse";
  */
 export default class AuthLoginUsecase implements UseCase<DataRequest<AuthIn>, DataResponse<AuthTokenOut | null>> {
     constructor(private repository: Repository) {
-        this.repository = repository;   
+        this.repository = repository;
     }
 
     async execute(context: AppContext, input: DataRequest<AuthIn>): Promise<DataResponse<AuthTokenOut | null>> {
         const { email, password } = input.data;
-        
 
-        const authUser = await this.repository.authenticate(email, password);
+        const hashedPassword = context.helpers?.crypto?.passwordEncode(password) + ""
+
+        const authUser = await this.repository.authenticate(email, hashedPassword);
 
         if (!authUser) {
             throw new Error("Authentication failed");
-        }
-
-        if (authUser.password !== password) {
-            return {
-                status: false,
-                data: null,
-                message: "Invalid password" 
-            }
         }
 
         const payload = {
@@ -55,7 +48,7 @@ export default class AuthLoginUsecase implements UseCase<DataRequest<AuthIn>, Da
         const session: AuthCreateSession = {
             token: token,
             userId: decoded.id,
-            expiresAt: utcDate, 
+            expiresAt: utcDate,
         }
 
         const sessionResult = await this.repository.saveSession(session as Session);
@@ -64,7 +57,7 @@ export default class AuthLoginUsecase implements UseCase<DataRequest<AuthIn>, Da
             return {
                 status: false,
                 data: null,
-                message: "Failed to save session"   
+                message: "Failed to save session"
             }
         }
 

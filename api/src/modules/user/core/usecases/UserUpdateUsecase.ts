@@ -9,12 +9,16 @@ import type UserUpdateIn from "../domain/UserUpdateIn";
 export default class UserUpdateUsecase implements UseCase<DataRequest<UserUpdateIn>, DataResponse<UserOut | null>> {
 
     constructor(private repository: Repository) {
-            this.repository = repository;   
+        this.repository = repository;
     }
 
     async execute(context: AppContext, input: DataRequest<UserUpdateIn>): Promise<DataResponse<UserOut | null>> {
 
         const updateUser: UserUpdateIn = { ...input.data };
+
+        if (updateUser.password) {
+            updateUser.password = context.helpers?.crypto?.passwordEncode(updateUser.password) + "";
+        }
 
         const result = await this.repository.update(updateUser);
 

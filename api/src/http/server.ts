@@ -3,6 +3,7 @@ import { env } from "../config/env";
 import RoutesRegister from "./routes";
 import type AppContext from "../shared/AppContext";
 import prismaClient from "../shared/db/prismaClient";
+import CryptoHelper from "../shared/Crypto";
 var cors = require('cors')
 
 
@@ -29,6 +30,10 @@ export class HttpServer {
             bdClient: prismaClient,
             jwtSecret: env.jwtSecret,
             jwtExpiration: env.jwtExpiration,
+            helpers: {
+                crypto: new CryptoHelper(env.jwtSecret)
+
+            }
         };
 
         await this.initRoutes(appContext);

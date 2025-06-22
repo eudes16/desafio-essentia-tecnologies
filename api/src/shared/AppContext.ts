@@ -1,4 +1,5 @@
 import type { PrismaClient } from "@prisma/client/extension";
+import type CryptoHelper from "./Crypto";
 
 export default interface AppContext {
     /**
@@ -18,6 +19,10 @@ export default interface AppContext {
     jwtExpiration: string;
 
     session?: SessionData;
+
+    helpers?: {
+        crypto?: CryptoHelper;
+    }
 }
 
 export interface AuthenticatedUser {

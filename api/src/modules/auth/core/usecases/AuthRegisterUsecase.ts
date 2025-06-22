@@ -8,12 +8,14 @@ import type Repository from "../domain/Repository";
 
 export default class AuthRegisterUsecase implements UseCase<DataRequest<AuthUserRegisterIn>, DataResponse<AuthUserOut | null>> {
     constructor(private repository: Repository) {
-        this.repository = repository;   
+        this.repository = repository;
     }
 
     async execute(context: AppContext, input: DataRequest<AuthUserRegisterIn>): Promise<DataResponse<AuthUserOut | null>> {
         const registerUser: AuthUserRegisterIn = { ...input.data };
-        
+
+        registerUser.password = context.helpers?.crypto?.passwordEncode(registerUser.password) + "";
+
         const result = await this.repository.register(registerUser);
 
         if (!result) {

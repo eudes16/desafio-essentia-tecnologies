@@ -11,23 +11,23 @@ export default class AuthRepository implements Repository {
         this.dbCliente = dbCliente;
 
     }
-    
 
     async authenticate(email: string, password: string): Promise<User | null> {
-        
+
         const user = await this.dbCliente.user.findUnique({
             where: {
-                email: email
+                email,
+                password
             }
         });
-        
+
         if (!user) {
             return null
         }
-        
+
         return user;
     }
-    
+
     async saveSession(session: Session): Promise<Session | null> {
         const result = await this.dbCliente.session.create({
             data: {
@@ -46,7 +46,7 @@ export default class AuthRepository implements Repository {
         return result;
     }
 
-    async logout(token: string, ): Promise<boolean> {
+    async logout(token: string,): Promise<boolean> {
         const session = await this.dbCliente.session.findFirst({
             where: {
                 token: token as string,
@@ -73,7 +73,7 @@ export default class AuthRepository implements Repository {
         return false;
     }
 
-    async  register(user: AuthUserRegisterIn): Promise<AuthUserOut | null> {
+    async register(user: AuthUserRegisterIn): Promise<AuthUserOut | null> {
         const existingUser = await this.dbCliente.user.findUnique({
             where: {
                 email: user.email,
@@ -105,6 +105,6 @@ export default class AuthRepository implements Repository {
             deletedAt: newUser.deletedAt || undefined,
         };
 
-        
+
     }
 } 

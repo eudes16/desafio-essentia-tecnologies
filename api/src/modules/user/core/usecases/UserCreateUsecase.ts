@@ -9,12 +9,16 @@ import type UserOut from "../domain/UserOut";
 // Todo: corrigiar o generic type do DataResponse
 export default class UserCreateUsecase implements UseCase<DataRequest<UserCreateIn>, DataResponse<UserOut>> {
     constructor(private repository: Repository) {
-        this.repository = repository;   
+        this.repository = repository;
     }
 
     async execute(context: AppContext, input: DataRequest<UserCreateIn>): Promise<DataResponse<UserOut>> {
         const createUser: UserCreateIn = { ...input.data }
-        
+
+        if (createUser.password) {
+            createUser.password = context.helpers?.crypto?.passwordEncode(createUser.password) + "";
+        }
+
         const result = await this.repository.create(createUser);
 
         if (!result) {
