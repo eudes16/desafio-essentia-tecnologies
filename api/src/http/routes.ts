@@ -1,4 +1,4 @@
-import { Router, type Request, type Response } from "express";
+import { Router, type Request, type Response, type Express } from "express";
 import RootController from "../modules/root/interface/RootController";
 import RootRoutes from "../modules/root/interface/RootRoutes";
 import type AppContext from "../shared/AppContext";
@@ -13,38 +13,39 @@ import { getDataToContext } from "../shared/middlewares/getDataToContext";
 
 export default class RoutesRegister {
     constructor(private context: AppContext) { }
+    async loadRoutes(app: Express): Promise<void> {
 
-    async registerRoutes(): Promise<Router> {
-        const router = Router();
-        
         // Middleware to get data for context for each request
-        await router.use(getDataToContext);
-        
-        // Public Routes
-        new RootRoutes(new RootController(
-            this.context
-        ), router);
+        await app.use(getDataToContext);
 
-        new AuthRoutes(new AuthController(
-            this.context
-        ), router);
-        
+
+        app.use("/",
+            // Public Routes
+            new RootRoutes(new RootController(
+                this.context
+            ), Router()).getRoutes(),
+        )
+
+        // Auth Routes
+        app.use("/auth",
+            new AuthRoutes(new AuthController(
+                this.context
+            ), Router()).getRoutes(),
+        );
+
         // Protected Routes
-        await router.use(authMiddleware); 
 
-        new UserRoutes(new UserController(
-            this.context
-        ), router);
+        app.use("/user",
+            new UserRoutes(new UserController(
+                this.context
+            ), Router()).getRoutes(),
+        );
 
-        new TodoRoutes(new TodoController(
-            this.context
-        ), router);
-        
-        // TODO: Remove this example route
-        router.get("/protected", (req: Request, res: Response) => {
-            res.status(200).json({ message: "This is a protected route" });
-        });
+        app.use("/todo",
+            new TodoRoutes(new TodoController(
+                this.context
+            ), Router()).getRoutes(),
+        );
 
-        return router;
     }
 }

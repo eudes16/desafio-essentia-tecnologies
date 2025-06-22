@@ -5,15 +5,16 @@ import resolveParams from "../../../http/resolveParams";
 import HttpStatus from "../../../shared/http/HttpStatus";
 import resolveRecordResponse from "../../../shared/records/resolveRecordResponse";
 import updateContext from "../../../shared/updateContext";
+import { authMiddleware } from "../../../shared/middlewares/authentication";
 
 export default class AuthRoutes extends Routes {
     constructor(private controller: Controller, router: Router) {
         super(controller, router, controller.context);
-        this.addRoutes();
+        this.register();
     }
 
-    async addRoutes(): Promise<void> {
-        await this._router.post("/auth/login", async (req, res) => {
+    async register(): Promise<void> {
+        await this._router.post("/login", async (req, res) => {
             updateContext(req, this.controller.context);
 
             const dataRequest = {
@@ -25,7 +26,7 @@ export default class AuthRoutes extends Routes {
             await res.status(response.code || HttpStatus.BAD_REQUEST).json(resolveRecordResponse(response, this.controller.context));
         });
 
-        await this._router.post("/auth/logout", async (req, res) => {
+        await this._router.post("/logout", authMiddleware, async (req, res) => {
             updateContext(req, this.controller.context);
 
             const dataRequest = {
@@ -37,9 +38,9 @@ export default class AuthRoutes extends Routes {
             await res.status(response.code || HttpStatus.BAD_REQUEST).json(resolveRecordResponse(response, this.controller.context));
         });
 
-        await this._router.post("/auth/register", async (req, res) => {
+        await this._router.post("/register", async (req, res) => {
             updateContext(req, this.controller.context);
-            
+
             const dataRequest = {
                 data: resolveParams(req),
             }
@@ -48,5 +49,9 @@ export default class AuthRoutes extends Routes {
 
             await res.status(response.code || HttpStatus.BAD_REQUEST).json(resolveRecordResponse(response, this.controller.context));
         });
+    }
+
+    getRoutes(): Router {
+        return this._router;
     }
 }

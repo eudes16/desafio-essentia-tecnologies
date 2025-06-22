@@ -19,8 +19,7 @@ export class HttpServer {
     }
 
     private async initRoutes(appContext: AppContext) {
-        const router = await new RoutesRegister(appContext).registerRoutes();
-        this.app.use("/api", router);
+        const router = await new RoutesRegister(appContext).loadRoutes(this.app);
     }
 
     public async start() {

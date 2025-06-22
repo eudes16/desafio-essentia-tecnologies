@@ -12,5 +12,7 @@ export abstract class Routes {
         this._controller.context = context;
     }
 
-    abstract addRoutes(): void;
+    abstract register(): void;
+
+    abstract getRoutes(): Router;
 }

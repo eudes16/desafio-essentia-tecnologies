@@ -7,12 +7,12 @@ import resolveRecordResponse from "../../../shared/records/resolveRecordResponse
 import updateContext from "../../../shared/updateContext";
 
 export default class RootRoutes extends Routes {
-    constructor(private controller: RootController, router: Router) {
+    constructor(private controller: RootController, private router: Router) {
         super(controller, router, controller.context);
-        this.addRoutes();
+        this.register();
     }
 
-    async addRoutes(): Promise<void> {
+    async register(): Promise<void> {
         await this._router.get("/", async (req, res) => {
             // Update app context with request data context 
             updateContext(req, this.controller.context);
@@ -20,10 +20,14 @@ export default class RootRoutes extends Routes {
             const dataRequest = {
                 data: resolveParams(req),
             }
-            
-            const response =  await this.controller.execute(dataRequest);
+
+            const response = await this.controller.execute(dataRequest);
 
             await res.status(response.code || HttpStatus.NOT_FOUND).json(resolveRecordResponse(response, this.controller.context));
         });
+    }
+
+    getRoutes(): Router {
+        return this._router;
     }
 }
