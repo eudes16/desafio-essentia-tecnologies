@@ -17,7 +17,7 @@ export default class UserUpdateUsecase implements UseCase<DataRequest<UserUpdate
         const updateUser: UserUpdateIn = { ...input.data };
 
         if (updateUser.password) {
-            updateUser.password = context.helpers?.crypto?.passwordEncode(updateUser.password) + "";
+            updateUser.password = context.helpers?.crypto(updateUser.password) + "";
         }
 
         const result = await this.repository.update(updateUser);

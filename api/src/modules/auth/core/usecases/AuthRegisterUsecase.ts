@@ -14,7 +14,7 @@ export default class AuthRegisterUsecase implements UseCase<DataRequest<AuthUser
     async execute(context: AppContext, input: DataRequest<AuthUserRegisterIn>): Promise<DataResponse<AuthUserOut | null>> {
         const registerUser: AuthUserRegisterIn = { ...input.data };
 
-        registerUser.password = context.helpers?.crypto?.passwordEncode(registerUser.password) + "";
+        registerUser.password = context.helpers?.crypto(registerUser.password) + "";
 
         const result = await this.repository.register(registerUser);
 

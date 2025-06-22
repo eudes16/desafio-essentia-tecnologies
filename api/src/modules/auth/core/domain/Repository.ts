@@ -9,7 +9,7 @@ export default interface Repository {
      * @param password - The password of the user.
      * @returns A promise that resolves to an authentication token.
      */
-    authenticate(email: string, password: string): Promise<User | null>;
+    authenticate(email: string): Promise<User | null>;
 
     /**
      * Saves a session for a user.

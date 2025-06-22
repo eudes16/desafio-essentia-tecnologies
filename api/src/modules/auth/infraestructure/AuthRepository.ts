@@ -12,12 +12,11 @@ export default class AuthRepository implements Repository {
 
     }
 
-    async authenticate(email: string, password: string): Promise<User | null> {
+    async authenticate(email: string): Promise<User | null> {
 
         const user = await this.dbCliente.user.findUnique({
             where: {
-                email,
-                password
+                email
             }
         });
 

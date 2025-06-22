@@ -23,12 +23,28 @@ export default class AuthLoginUsecase implements UseCase<DataRequest<AuthIn>, Da
     async execute(context: AppContext, input: DataRequest<AuthIn>): Promise<DataResponse<AuthTokenOut | null>> {
         const { email, password } = input.data;
 
-        const hashedPassword = context.helpers?.crypto?.passwordEncode(password) + ""
+        const hashedPassword = context.helpers?.crypto(password) + ""
 
-        const authUser = await this.repository.authenticate(email, hashedPassword);
+        const authUser = await this.repository.authenticate(email);
+
+        console.log("authUser", authUser, { email, password, hashedPassword });
 
         if (!authUser) {
-            throw new Error("Authentication failed");
+            console.error("Invalid email or password", { email, password });
+            return {
+                status: false,
+                data: null,
+                message: "E-mail not found"
+            }
+        }
+
+        if (authUser.password !== hashedPassword) {
+            console.log("Invalid email or password", hashedPassword, password, (hashedPassword == authUser.password));
+            return {
+                status: false,
+                data: null,
+                message: "Invalid password"
+            }
         }
 
         const payload = {
