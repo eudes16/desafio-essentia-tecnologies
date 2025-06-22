@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+@use "tailwindcss";
+
+@use "primeicons/primeicons.css";
+@use 'ngx-toastr/toastr';
+
+@plugin "tailwindcss-primeui";
+
+
+html,
+body {
+    font-family: 'Poppins', sans-serif;
+    height: 100%;
+}

@@ -1,25 +1,25 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
+import { provideToastr } from 'ngx-toastr';
 import Aura from '@primeng/themes/aura';
-
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
         provideZoneChangeDetection({ eventCoalescing: true }),
         provideRouter(routes),
-        provideAnimationsAsync(),
+        provideAnimations(),
         providePrimeNG({
             theme: {
                 preset: Aura,
                 options: {
-                    darkModeSelector: '.my-app-dark'
+                    darkModeSelector: false || 'none',
                 }
             }
-        })
+        }),
+        provideToastr(),
     ]
 };

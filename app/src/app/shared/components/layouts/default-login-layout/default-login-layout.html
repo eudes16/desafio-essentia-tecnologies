@@ -1,0 +1,24 @@
+<main>
+    <section class="form-section">
+        <p-panel header="{{ title }}" class="login-panel p-fluid">
+            <ng-content></ng-content>
+            <div class="buttons">
+
+                <button pButton pRipple severity="primary" size="small" class=" p-fluid" (click)="submit()"
+                    [disabled]="primaryButtonDisabled">
+                    <span pButtonLabel>{{ primaryButtonText }}</span>
+                </button>
+                <p-divider>ou</p-divider>
+                <button pButton pRipple severity="secondary" size="small" class="p-button-outlined p-fluid"
+                    (click)="navigate()">
+                    <span pButtonLabel>{{ secondaryButtonText }}</span>
+                </button>
+            </div>
+        </p-panel>
+
+    </section>
+    <section class="main-section">
+        <h1>Essentia Technologies - ToDo App</h1>
+        <p>Desafio Dev Fullstack NodeJs + Angular 14+ </p>
+    </section>
+</main>

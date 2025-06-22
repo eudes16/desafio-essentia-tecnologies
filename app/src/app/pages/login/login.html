@@ -1,0 +1,15 @@
+<app-default-login-layout title="Logue em sua conta" primaryButtonText="Logar" secondaryButtonText="Registrar-se"
+    (submit)="submit()" (navigate)="navigate()" [primaryButtonDisabled]="!loginForm.valid">
+    <form [formGroup]="loginForm">
+
+        <p-iconfield>
+            <input type="email" pInputText placeholder="E-mail" formControlName="email" />
+            <p-inputicon styleClass="pi pi-at" />
+        </p-iconfield>
+
+        <p-iconfield>
+            <input type="password" pInputText placeholder="Senha" formControlName="password" />
+            <p-inputicon styleClass="pi pi-key" />
+        </p-iconfield>
+    </form>
+</app-default-login-layout>
