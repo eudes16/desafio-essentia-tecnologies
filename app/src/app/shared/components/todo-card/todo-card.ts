@@ -30,7 +30,7 @@ export class TodoCard {
     };
 
     ngOnInit() {
-        if (this.todo.status === TodoStatus.completed) {
+        if (this.todo.status === TodoStatus.completed || this.todo.status === TodoStatus.cancelled) {
             this.titleClass['line-through'] = true;
             this.titleClass['text-gray-500'] = true;
         }

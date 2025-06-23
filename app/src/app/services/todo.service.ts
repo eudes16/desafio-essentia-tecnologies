@@ -46,6 +46,29 @@ export class TodoService {
         }
     }
 
+    async createOrUpdateTodo(todo: TodoResponse): Promise<DataResponse<TodoResponse>> {
+        try {
+            if (!todo || !todo.title || !todo.description) {
+                throw new Error('Invalid todo item');
+            }
+
+            const method = todo.id ? 'put' : 'post';
+            const url = todo.id ? `${environment.apiUrl}/todo/${todo.id}` : `${environment.apiUrl}/todo`;
+
+            const resp = await this.httpClient[method]<DataResponse<TodoResponse>>(url, todo);
+
+            if (!resp || !resp.data) {
+                throw new Error('Failed to create or update todo: Invalid response from server');
+            }
+
+            return resp;
+
+        } catch (error) {
+            console.error('Error creating or updating todo:', error);
+            throw error;
+        }
+    }
+
     async deleteTodo(todo: TodoResponse): Promise<DataResponse<TodoResponse>> {
         try {
             if (!todo || !todo.id) {

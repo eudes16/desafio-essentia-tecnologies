@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PanelModule } from 'primeng/panel';
 import { MenuModule } from 'primeng/menu';
 import { ButtonModule } from 'primeng/button';
+import { Dialog } from 'primeng/dialog';
 import { MenubarModule } from 'primeng/menubar';
 import { PaginatorModule } from 'primeng/paginator';
 import { TodoService } from '../../services/todo.service';
@@ -11,12 +12,11 @@ import { TodoPriority, TodoResponse, TodoStatus } from '../../types/todo-respons
 import { CommonModule } from '@angular/common';
 import { TodoCard } from '../../shared/components/todo-card/todo-card';
 import { MenuItem } from 'primeng/api';
-import { Modal } from "../../shared/components/modal/modal";
-
+import { TodoEdit } from "../../shared/components/todo-edit/todo-edit";
 
 @Component({
     selector: 'app-todos',
-    imports: [PanelModule, CommonModule, TodoCard, MenubarModule, MenuModule, ButtonModule, PaginatorModule, Modal],
+    imports: [PanelModule, CommonModule, TodoCard, MenubarModule, MenuModule, ButtonModule, PaginatorModule, Dialog, TodoEdit],
     providers: [LoginService],
     templateUrl: './todos.html',
     styleUrl: './todos.scss'
@@ -24,8 +24,8 @@ import { Modal } from "../../shared/components/modal/modal";
 export class Todos {
     private router = inject(Router);
 
-    onEditTodo = signal<Partial<TodoResponse | boolean>>(false);
-    openModal = signal(false);
+    onEditTodo!: TodoResponse;
+    openModal = false;
 
     // Pagination properties
     rows = 5;
@@ -86,7 +86,7 @@ export class Todos {
 
 
     ngOnInit() {
-        this.onEditTodo.set(false);
+        this.onEditTodo = {} as TodoResponse; // Initialize onEditTodo
         this.initEndItens();
         this.getTodos();
     }
@@ -105,8 +105,9 @@ export class Todos {
     }
 
     onEdit(todo: TodoResponse) {
-        this.onEditTodo.set(todo);
-        console.log('Editing todo:', todo);
+        this.onEditTodo = todo;
+        this.openModal = true;
+        console.log('Editing todo:', this.openModal, todo);
     }
 
     onDelete(todo: TodoResponse) {
@@ -134,15 +135,35 @@ export class Todos {
             priority: TodoPriority.low
         };
 
-
-        this.onEditTodo.update(oldValue => todo);
-        this.openModal.set(true);
-        console.log('Creating new todo', this.onEditTodo(), todo);
+        this.onEditTodo = todo as TodoResponse;
+        this.openModal = true;
+        console.log('Creating new todo', this.onEditTodo, todo);
     }
 
     closeModal() {
-        this.onEditTodo.update(oldValue => false);
-        this.openModal.set(false);
-        console.log('Closing modal');
+        this.onEditTodo = {} as TodoResponse; // Reset the todo being edited
+        this.openModal = false;
+        console.log('Closing modal', this.openModal);
     }
+
+    onSave(todo: TodoResponse) {
+        console.log('Saving todo:', todo);
+        this.todoService.createOrUpdateTodo(todo).then(response => {
+            if (response && response.data) {
+                // Update the todo list with the new or updated todo
+                if (todo.id) {
+                    this.todos.update(oldTodos => oldTodos.map(t => t.id === todo.id ? response.data : t));
+                } else {
+                    this.todos.update(oldTodos => [...oldTodos, response.data]);
+                }
+                this.getTodos();
+            } else {
+                console.error('Failed to save todo: Invalid response from server');
+            }
+        }).catch(error => {
+            console.error('Error saving todo:', error);
+        });
+        this.closeModal();
+    }
+
 }

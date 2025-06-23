@@ -27,4 +27,10 @@
     </section>
 </main>
 
-<app-modal [visible]="openModal()" (onClose)="closeModal()"></app-modal>
+@if (openModal) {
+<p-dialog header="{{onEditTodo.id ? 'Editar' : 'Novo'}}" [modal]="true" [(visible)]="openModal"
+    [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+    <app-todo-edit [todo]="onEditTodo" (onClose)="closeModal()" (onSubmit)="onSave($event)"></app-todo-edit>
+</p-dialog>
+
+}
