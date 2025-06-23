@@ -15,6 +15,7 @@ export default class TodoUpdateUsecase implements UseCase<DataRequest<TodoUpdate
     async execute(context: AppContext, input: DataRequest<TodoUpdateIn>): Promise<DataResponse<TodoOut | null>> {
 
         const updateTodo: TodoUpdateIn = { ...input.data };
+        updateTodo.userId = context.session!.user.id;
 
         const result = await this.respository.update(updateTodo);
 

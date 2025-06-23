@@ -7,14 +7,15 @@ import type TodoCreateIn from "../domain/TodoCreateIn";
 import type TodoOut from "../domain/TodoOut";
 
 export default class TodoCreateUsecase implements UseCase<DataRequest<TodoCreateIn>, DataResponse<TodoOut | null>> {
-    
+
     constructor(private respository: Repository) {
         this.respository = respository;
     }
-    
+
     async execute(context: AppContext, input: DataRequest<TodoCreateIn>): Promise<DataResponse<TodoOut | null>> {
 
         const createTodo: TodoCreateIn = { ...input.data };
+        createTodo.userId = context.session!.user.id;
 
         const result = await this.respository.create(createTodo);
 
@@ -31,5 +32,5 @@ export default class TodoCreateUsecase implements UseCase<DataRequest<TodoCreate
             data: result,
         };
     }
-    
+
 }
