@@ -6,8 +6,11 @@
                 <span class="font-black">ToDo App</span>
             </ng-template>
             <ng-template pTemplate="end">
-                <p-button icon="pi pi-plus" severity="primary" rounded text (click)="openCreateTodoDialog()" />
-                <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
+                <p-button label="Novo Todo" icon="pi pi-plus" severity="primary" size="small"
+                    (click)="openCreateTodoDialog()" />
+
+                <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)"
+                    size="small" />
                 <p-menu #menu id="config_menu" [model]="itemsEnd" [popup]="true" />
             </ng-template>
 
