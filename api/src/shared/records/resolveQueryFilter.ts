@@ -1,9 +1,12 @@
+import type { OrderBy, OrderByType } from "./OrderBy";
+
 type QueryParams = Record<string, any>;
 
 interface QueryResult {
     where: Record<string, any>;
     pagination: { take: number; skip: number };
     include: Record<string, boolean>;
+    orderBy?: OrderBy;
 }
 
 const suffixHandlers: [string, (field: string, value: any) => any][] = [
@@ -29,6 +32,8 @@ const suffixHandlers: [string, (field: string, value: any) => any][] = [
 
 export default function resolveQueryFilters<T>(params: QueryParams): QueryResult {
     const where: Record<string, any> = {};
+    const orderBy: OrderBy = {};
+
     const pagination = {
         take: +(params.limit ?? 10),
         skip: params.page ? (params.page - 1) * +(params.limit ?? 10) : 0,
@@ -39,6 +44,19 @@ export default function resolveQueryFilters<T>(params: QueryParams): QueryResult
         if (key === 'includes') {
             for (const v of `${value}`.split(',')) {
                 include[v] = true;
+            }
+            continue;
+        }
+
+        // example: orderBy=field1,field2_asc, field3_desc
+        if (key === 'order') {
+            for (const order of `${value}`.split(',')) {
+                const [field, direction] = order.trim().split('_');
+                if (field && direction) {
+                    orderBy[field] = direction as OrderByType;
+                } else if (field) {
+                    orderBy[field] = 'asc'; // Default to ascending if no direction is specified
+                }
             }
             continue;
         }
@@ -57,5 +75,5 @@ export default function resolveQueryFilters<T>(params: QueryParams): QueryResult
         }
     }
 
-    return { where, pagination, include };
+    return { where, pagination, include, orderBy };
 }

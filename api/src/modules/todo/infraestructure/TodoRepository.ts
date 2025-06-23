@@ -140,7 +140,7 @@ export default class TodoRepository implements Repository {
 
 
     async find(data: TodoFindIn): Promise<QueryResult<TodoOut>> {
-        const { where: _where, pagination: _pagination } = resolveQueryFilters(data);
+        const { where: _where, pagination: _pagination, orderBy } = resolveQueryFilters(data);
 
 
         const whereQuery = {
@@ -151,6 +151,9 @@ export default class TodoRepository implements Repository {
             ..._where,
         }
 
+        const orderByQuery = {
+            ...orderBy
+        }
 
         const [todos, count] = await this.dbCliente.$transaction([
             this.dbCliente.todo.findMany({
@@ -159,6 +162,7 @@ export default class TodoRepository implements Repository {
                 },
                 skip: _pagination?.skip,
                 take: _pagination?.take,
+                orderBy: orderByQuery,
             }),
             this.dbCliente.todo.count({
                 where: {
