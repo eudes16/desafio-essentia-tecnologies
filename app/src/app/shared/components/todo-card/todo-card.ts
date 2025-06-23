@@ -1,13 +1,14 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { TodoPriority, TodoResponse, TodoStatus } from '../../../types/todo-response.type';
 import { PanelModule } from 'primeng/panel';
+import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
 import { HelpersService } from '../../../services/helpers.service';
 
 @Component({
     selector: 'app-todo-card',
-    imports: [PanelModule, TagModule, DividerModule],
+    imports: [PanelModule, TagModule, DividerModule, ButtonModule],
     templateUrl: './todo-card.html',
     styleUrl: './todo-card.scss'
 })
@@ -15,6 +16,33 @@ export class TodoCard {
     helper = inject(HelpersService)
 
     @Input({ required: true }) todo!: TodoResponse;
+
+    @Output() onEdit = new EventEmitter<TodoResponse>();
+
+    @Output() onDelete = new EventEmitter<TodoResponse>();
+
+    @Output() onComplete = new EventEmitter<TodoResponse>();
+
+    titleClass = {
+        'font-bold': true,
+        'line-through': false,
+        'text-gray-500': false
+    };
+
+    ngOnInit() {
+        if (this.todo.status === TodoStatus.completed) {
+            this.titleClass['line-through'] = true;
+            this.titleClass['text-gray-500'] = true;
+        }
+    }
+
+    edit(todo: TodoResponse) {
+        this.onEdit.emit(this.todo);
+    }
+
+    delete(todo: TodoResponse) {
+        this.onDelete.emit(this.todo);
+    }
 
     resolvePrority(priority: TodoPriority): string {
         switch (priority) {

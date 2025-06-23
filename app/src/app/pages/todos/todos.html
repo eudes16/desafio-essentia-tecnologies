@@ -6,8 +6,7 @@
                 <span class="font-black">ToDo App</span>
             </ng-template>
             <ng-template pTemplate="end">
-                <p-button label="Novo Todo" icon="pi pi-plus" severity="primary" size="small"
-                    (click)="openCreateTodoDialog()" />
+                <p-button label="Novo Todo" icon="pi pi-plus" severity="primary" size="small" (click)="newTodo()" />
 
                 <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)"
                     size="small" />
@@ -23,7 +22,9 @@
                 currentPageReportTemplate="{first} - {last}  Total: {totalRecords}" />
         </div>
         @for (item of todos(); track item.id) {
-        <app-todo-card [todo]="item"></app-todo-card>
+        <app-todo-card [todo]="item" (onEdit)="onEdit($event)" (onDelete)="onDelete($event)"></app-todo-card>
         }
     </section>
 </main>
+
+<app-modal [visible]="openModal()" (onClose)="closeModal()"></app-modal>

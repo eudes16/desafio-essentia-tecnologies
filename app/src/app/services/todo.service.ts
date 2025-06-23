@@ -46,6 +46,26 @@ export class TodoService {
         }
     }
 
+    async deleteTodo(todo: TodoResponse): Promise<DataResponse<TodoResponse>> {
+        try {
+            if (!todo || !todo.id) {
+                throw new Error('Invalid todo item');
+            }
+
+            const resp = await this.httpClient.delete<DataResponse<TodoResponse>>(`${environment.apiUrl}/todo/${todo.id}`);
+
+            if (!resp || !resp.data) {
+                throw new Error('Failed to delete todo: Invalid response from server');
+            }
+
+            return resp;
+
+        } catch (error) {
+            console.error('Error deleting todo:', error);
+            throw error;
+        }
+    }
+
     private resolveRequest(request?: DataRequest): string {
         if (!request) {
             return '';
@@ -54,7 +74,7 @@ export class TodoService {
         const params: string[] = [];
 
         if (request.filters) {
-            params.push(`filters=${encodeURIComponent(JSON.stringify(request.filters))}`);
+            params.push(`${encodeURIComponent(JSON.stringify(request.filters))}`);
         }
 
         if (request.page !== undefined) {

@@ -3,7 +3,7 @@
         <div class="flex flex-col gap-2 ">
             <div class="todo-card-header flex flex-1 justify-between items-center gap-2 pr-2">
 
-                <span class="font-bold">{{todo.title}}</span>
+                <span [class]="titleClass">{{todo.title}}</span>
                 @if (todo.dueDate) {
                 <div class="text-[10px] text-gray-500 rounded-sm bg-zinc-100 px-2 py-1">
                     Data limite: {{helper.dateISOtoPtBr(todo.dueDate)}}
@@ -34,6 +34,11 @@
                     {{helper.dateISOtoPtBr(todo.updatedAt)}}
                 </div>
                 }
+            </div>
+
+            <div>
+                <p-button icon="pi pi-pencil" severity="secondary" rounded text size="small" (click)="edit(todo)" />
+                <p-button icon="pi pi-trash" severity="danger" rounded text size="small" (click)="delete(todo)" />
             </div>
         </div>
     </ng-template>

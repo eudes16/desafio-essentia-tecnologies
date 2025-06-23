@@ -7,26 +7,25 @@ import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
 import { PaginatorModule } from 'primeng/paginator';
 import { TodoService } from '../../services/todo.service';
-import { TodoResponse } from '../../types/todo-response.type';
+import { TodoPriority, TodoResponse, TodoStatus } from '../../types/todo-response.type';
 import { CommonModule } from '@angular/common';
 import { TodoCard } from '../../shared/components/todo-card/todo-card';
 import { MenuItem } from 'primeng/api';
+import { Modal } from "../../shared/components/modal/modal";
 
-type PaginationData = {
-    page: number;
-    rows: number;
-    total: number;
-    first: number;
-}
+
 @Component({
     selector: 'app-todos',
-    imports: [PanelModule, CommonModule, TodoCard, MenubarModule, MenuModule, ButtonModule, PaginatorModule],
+    imports: [PanelModule, CommonModule, TodoCard, MenubarModule, MenuModule, ButtonModule, PaginatorModule, Modal],
     providers: [LoginService],
     templateUrl: './todos.html',
     styleUrl: './todos.scss'
 })
 export class Todos {
     private router = inject(Router);
+
+    onEditTodo = signal<Partial<TodoResponse | boolean>>(false);
+    openModal = signal(false);
 
     // Pagination properties
     rows = 5;
@@ -38,6 +37,7 @@ export class Todos {
 
     todos = signal<TodoResponse[]>([]);
 
+
     onPageChange(event: any) {
         this.getTodos(event.page, event.rows);
     }
@@ -47,7 +47,7 @@ export class Todos {
     constructor(private loginService: LoginService, private todoService: TodoService) { }
 
     logout() {
-        // Implement logout logic here
+
         this.loginService.logout().then(response => {
             if (response && response.data) {
                 this.router.navigate(['/']);
@@ -84,12 +84,9 @@ export class Todos {
         });
     }
 
-    openCreateTodoDialog() {
-        // Implement logic to open a dialog for creating a new todo
-        console.log('Open create todo dialog');
-    }
 
     ngOnInit() {
+        this.onEditTodo.set(false);
         this.initEndItens();
         this.getTodos();
     }
@@ -107,4 +104,45 @@ export class Todos {
         ];
     }
 
+    onEdit(todo: TodoResponse) {
+        this.onEditTodo.set(todo);
+        console.log('Editing todo:', todo);
+    }
+
+    onDelete(todo: TodoResponse) {
+        this.todoService.deleteTodo(todo).then(response => {
+            if (response && response.data) {
+                this.todos.update(oldTodos => oldTodos.filter(t => t.id !== todo.id));
+                this.getTodos(); // Refresh the todo list
+                console.log('Todo deleted successfully:', todo);
+            } else {
+                console.error('Failed to delete todo: Invalid response from server');
+            }
+        }).catch(error => {
+            console.error('Error deleting todo:', error);
+        });
+    }
+
+    newTodo() {
+        // empty the onEditTodo to create a new todo
+        const todo: Partial<TodoResponse> = {
+            id: 0,
+            title: '',
+            description: '',
+            dueDate: null,
+            status: TodoStatus.pending,
+            priority: TodoPriority.low
+        };
+
+
+        this.onEditTodo.update(oldValue => todo);
+        this.openModal.set(true);
+        console.log('Creating new todo', this.onEditTodo(), todo);
+    }
+
+    closeModal() {
+        this.onEditTodo.update(oldValue => false);
+        this.openModal.set(false);
+        console.log('Closing modal');
+    }
 }
