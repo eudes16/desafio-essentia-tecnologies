@@ -42,6 +42,25 @@ export class LoginService {
 
     }
 
+    async register(name: string, email: string, password: string): Promise<DataResponse<LoginResponse>> {
+        try {
+            const resp = await this.httpClient.post<DataResponse<LoginResponse>>(`${environment.apiUrl}/auth/register`, { email, password });
+
+            if (!resp || !resp.data) {
+                throw new Error('Registration failed: Invalid response from server');
+            }
+
+            sessionStorage.setItem('auth-token', resp.data.token);
+            this.httpClient.addHeader('Authorization', `Bearer ${resp.data.token}`);
+
+            return resp;
+
+        } catch (error) {
+            console.error('Error during registration:', error);
+            throw error;
+        }
+    }
+
     async logout(): Promise<DataResponse<LogOutResponse>> {
         try {
 
@@ -61,4 +80,6 @@ export class LoginService {
             throw error;
         }
     }
+
+
 }

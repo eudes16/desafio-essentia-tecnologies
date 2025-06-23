@@ -1,0 +1,40 @@
+<p-panel [header]="" [toggleable]="true" class="todo-card">
+    <ng-template #header>
+        <div class="flex flex-col gap-2 ">
+            <div class="todo-card-header flex flex-1 justify-between items-center gap-2 pr-2">
+
+                <span class="font-bold">{{todo.title}}</span>
+                @if (todo.dueDate) {
+                <div class="text-[10px] text-gray-500 rounded-sm bg-zinc-100 px-2 py-1">
+                    Data limite: {{helper.dateISOtoPtBr(todo.dueDate)}}
+                </div>
+                }
+            </div>
+            <div class="flex items-center gap-2">
+                <p-tag [severity]="resolveStatusSeverity(todo.status)" [icon]="resolveStatusIcon(todo.status)"
+                    [value]="resolveStatus(todo.status)" />
+                <p-tag [severity]="resolveProritySeverity(todo.priority)" [icon]="resolvePriorityIcon(todo.priority)"
+                    [value]="resolvePrority(todo.priority)" />
+            </div>
+        </div>
+    </ng-template>
+    <p-divider type="dotted" />
+    {{todo.description}}
+    <ng-template #footer>
+        <p-divider type="dotted" />
+        <div class="flex flex-wrap items-center justify-between gap-4">
+
+            <div class="flex items-end gap-1">
+                <div class="text-[10px] text-gray-500 rounded-sm bg-zinc-100 px-2 py-1">
+                    Criado em {{helper.dateISOtoPtBr(todo.createdAt)}}
+                </div>
+                @if (todo.status == "completed") {<div
+                    class="text-[10px] text-gray-500 rounded-sm bg-zinc-100 px-2 py-1">
+                    <span>Finalizado em:</span>
+                    {{helper.dateISOtoPtBr(todo.updatedAt)}}
+                </div>
+                }
+            </div>
+        </div>
+    </ng-template>
+</p-panel>

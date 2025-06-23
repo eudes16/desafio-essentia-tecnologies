@@ -1,1 +1,26 @@
-<button (click)="logout()">Logout</button>
+<main>
+    <section class="menu-section flex justify-content-between align-items-center px-2 pt-2 top-0 z-10 w-full">
+
+        <p-menubar class="w-full ">
+            <ng-template pTemplate="start">
+                <span class="font-black">ToDo App</span>
+            </ng-template>
+            <ng-template pTemplate="end">
+                <p-button icon="pi pi-plus" severity="primary" rounded text (click)="openCreateTodoDialog()" />
+                <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
+                <p-menu #menu id="config_menu" [model]="itemsEnd" [popup]="true" />
+            </ng-template>
+
+        </p-menubar>
+    </section>
+    <section class="content-section">
+        <div class="sticky -top-10 w-full z-10 bg-white backdrop-blur-sm">
+            <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="total"
+                [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 15]"
+                currentPageReportTemplate="{first} - {last}  Total: {totalRecords}" />
+        </div>
+        @for (item of todos(); track item.id) {
+        <app-todo-card [todo]="item"></app-todo-card>
+        }
+    </section>
+</main>

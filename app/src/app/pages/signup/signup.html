@@ -1,0 +1,21 @@
+<app-default-login-layout title="Crie sua conta" primaryButtonText="Cadastrar" secondaryButtonText="Login"
+    (submit)="submit()" (navigate)="navigate()" [primaryButtonDisabled]="!signUpForm.valid">
+    <form [formGroup]="signUpForm">
+
+        <p-iconfield>
+            <input type="text" pInputText placeholder="Nome" formControlName="name" />
+            <p-inputicon styleClass="pi pi-user" />
+        </p-iconfield>
+
+
+        <p-iconfield>
+            <input type="email" pInputText placeholder="E-mail" formControlName="email" />
+            <p-inputicon styleClass="pi pi-at" />
+        </p-iconfield>
+
+        <p-iconfield>
+            <input type="password" pInputText placeholder="Senha" formControlName="password" />
+            <p-inputicon styleClass="pi pi-key" />
+        </p-iconfield>
+    </form>
+</app-default-login-layout>
