@@ -1,0 +1,14 @@
+<p-dialog maskStyleClass="backdrop-blur-sm" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" >
+    <ng-template pTemplate="header">
+        <span class="font-black">{{title}}</span>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        {{message}}
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <p-button [label]="'Fechar'" (click)="closeDialog()" text severity="danger" />
+        <p-button [label]="'Confirmar'" (click)="confirmDialog()" severity="primary" />
+    </ng-template>
+</p-dialog>

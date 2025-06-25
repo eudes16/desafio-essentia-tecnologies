@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { TodoCard } from '../../shared/components/todo-card/todo-card';
 import { MenuItem } from 'primeng/api';
 import { TodoEdit } from "../../shared/components/todo-edit/todo-edit";
+import { DialogService } from '../../services/dialog-service';
 
 @Component({
     selector: 'app-todos',
@@ -23,6 +24,7 @@ import { TodoEdit } from "../../shared/components/todo-edit/todo-edit";
 })
 export class Todos {
     private router = inject(Router);
+    protected dialogService = inject(DialogService);
 
     onEditTodo!: TodoResponse;
     openModal = false;
@@ -48,16 +50,14 @@ export class Todos {
 
     logout() {
 
-        this.loginService.logout().then(response => {
-            if (response && response.data) {
-                this.router.navigate(['/']);
-            } else {
-                console.error('Logout failed: Invalid response from server');
+        this.dialogService.open({title: 'Confirmar logout', message: 'Você tem certeza que deseja fazer o logout?', options: {
+            onConfirmCallback: async () => {
+                const resp = await this.loginService.logout();
+                if (resp && resp.data) {
+                    this.router.navigate(['/']);
+                }
             }
-        }).catch(error => {
-            console.error('Error during logout:', error);
-        });
-        console.log('User logged out');
+        }});
     }
 
     getTodos(nextPage?: number, nextRows?: number) {
@@ -84,13 +84,11 @@ export class Todos {
         });
     }
 
-
     ngOnInit() {
         this.onEditTodo = {} as TodoResponse; // Initialize onEditTodo
         this.initEndItens();
         this.getTodos();
     }
-
 
     initEndItens() {
         this.itemsEnd = [
@@ -107,20 +105,22 @@ export class Todos {
     onEdit(todo: TodoResponse) {
         this.onEditTodo = todo;
         this.openModal = true;
-        console.log('Editing todo:', this.openModal, todo);
     }
 
     onDelete(todo: TodoResponse) {
-        this.todoService.deleteTodo(todo).then(response => {
-            if (response && response.data) {
-                this.todos.update(oldTodos => oldTodos.filter(t => t.id !== todo.id));
-                this.getTodos(); // Refresh the todo list
-                console.log('Todo deleted successfully:', todo);
-            } else {
-                console.error('Failed to delete todo: Invalid response from server');
+        this.dialogService.open({
+            title: 'Confirmar exclusão',
+            message: `Você tem certeza que deseja excluir a tarefa "${todo.title}"?`,
+            options: {
+                onConfirmCallback: async () => {
+                    const resp = await this.todoService.deleteTodo(todo);
+                    if (resp && resp.data) {
+                        this.getTodos(); // Refresh the todo list
+                    }
+                },
+                confirmLabel: 'Excluir',
+                cancelLabel: 'Cancelar'
             }
-        }).catch(error => {
-            console.error('Error deleting todo:', error);
         });
     }
 

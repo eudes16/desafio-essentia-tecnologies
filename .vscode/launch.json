@@ -39,6 +39,15 @@
             "name": "Attach Bun",
             "url": "ws://localhost:6499/",
             "stopOnEntry": false
+        },
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Debug Angular",
+            "url": "http://localhost:4200",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMaps": true,
+            "trace": true
         }
     ]
 }
