@@ -18,8 +18,10 @@ export default class RoutesRegister {
         // Middleware to get data for context for each request
         await app.use(getDataToContext);
 
+        const router = Router();
 
-        app.use("/",
+
+        router.use("/",
             // Public Routes
             new RootRoutes(new RootController(
                 this.context
@@ -27,7 +29,7 @@ export default class RoutesRegister {
         )
 
         // Auth Routes
-        app.use("/auth",
+        router.use("/auth",
             new AuthRoutes(new AuthController(
                 this.context
             ), Router()).getRoutes(),
@@ -35,17 +37,19 @@ export default class RoutesRegister {
 
         // Protected Routes
 
-        app.use("/user",
+        router.use("/user",
             new UserRoutes(new UserController(
                 this.context
             ), Router()).getRoutes(),
         );
 
-        app.use("/todo",
+        router.use("/todo",
             new TodoRoutes(new TodoController(
                 this.context
             ), Router()).getRoutes(),
         );
+
+        app.use("/api", router);
 
     }
 }

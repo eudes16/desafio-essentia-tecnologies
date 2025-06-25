@@ -178,7 +178,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/eudesvss/desafios/desafio-essentia-tecnologies/api/src/generated/client",
+      "value": "C:\\Users\\eudes\\projetos\\javascript\\desafio-essentia-tecnologies\\api\\src\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -187,17 +187,16 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "darwin-arm64",
+        "value": "windows",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/eudesvss/desafios/desafio-essentia-tecnologies/api/prisma/schema.prisma",
+    "sourceFilePath": "C:\\Users\\eudes\\projetos\\javascript\\desafio-essentia-tecnologies\\api\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.10.0",
@@ -206,6 +205,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
