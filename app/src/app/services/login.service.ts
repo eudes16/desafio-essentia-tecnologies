@@ -44,7 +44,7 @@ export class LoginService {
 
     async register(name: string, email: string, password: string): Promise<DataResponse<LoginResponse>> {
         try {
-            const resp = await this.httpClient.post<DataResponse<LoginResponse>>(`${environment.apiUrl}/auth/register`, { email, password });
+            const resp = await this.httpClient.post<DataResponse<LoginResponse>>(`/auth/register`, { email, password });
 
             if (!resp || !resp.data) {
                 throw new Error('Registration failed: Invalid response from server');
@@ -65,7 +65,7 @@ export class LoginService {
         try {
 
 
-            const resp = await this.httpClient.post<DataResponse<LogOutResponse>>(`${environment.apiUrl}/auth/logout`, {});
+            const resp = await this.httpClient.post<DataResponse<LogOutResponse>>(`/auth/logout`, {});
 
             if (!resp || !resp.data) {
                 throw new Error('Logout failed: Invalid response from server');
