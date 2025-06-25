@@ -71,14 +71,16 @@ Projeto de uma aplicação de lista de tarefas
     ```bash
     bun install
     ```
-3. Edite o arquivo `app/src/environments/environment.ts`
+3. Edite o arquivo `app/src/proxy.conf.json`
 
     ```js
-    export const environment = {
-        production: false,
-        apiUrl: 'http://www.local.api.com:4000', // <--- Mude para url que está rodando o api
-        appName: 'Essentia Technologies - ToDo'
-    };
+    {
+        "/api": {
+            "target": "http://localhost:4000", // <-- Ajuste para a url da API
+            "secure": false,
+            "changeOrigin": true
+        }
+    }
     ```
 
 3. Inicie o servidor de desenvolvimento:
