@@ -24,7 +24,7 @@ export class LoginService {
         try {
 
 
-            const resp = await this.httpClient.post<DataResponse<LoginResponse>>(`${environment.apiUrl}/auth/login`, { email, password });
+            const resp = await this.httpClient.post<DataResponse<LoginResponse>>(`/auth/login`, { email, password });
 
             if (!resp || !resp.data) {
                 throw new Error('Login failed: Invalid response from server');

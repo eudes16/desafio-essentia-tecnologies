@@ -10,6 +10,8 @@ import { DataRequest } from '../types/data-request.type';
 })
 export class TodoService {
 
+    private apiUrl = '/api';
+
     constructor(
         private httpClient: HttpClientService
     ) {
@@ -23,7 +25,7 @@ export class TodoService {
             this.httpClient.addHeader('Authorization', `Bearer ${token}`);
         }
 
-        this.httpClient.setBaseUrl(environment.apiUrl);
+        this.httpClient.setBaseUrl(this.apiUrl);
 
 
     }
@@ -32,7 +34,7 @@ export class TodoService {
         try {
             const queryParams = this.resolveRequest(request);
 
-            const resp = await this.httpClient.get<DataResponse<TodoResponse[]>>(`${environment.apiUrl}/todo${queryParams}`);
+            const resp = await this.httpClient.get<DataResponse<TodoResponse[]>>(`/todo${queryParams}`);
 
             if (!resp || !resp.data) {
                 throw new Error('Failed to fetch todos: Invalid response from server');
@@ -53,7 +55,7 @@ export class TodoService {
             }
 
             const method = todo.id ? 'put' : 'post';
-            const url = todo.id ? `${environment.apiUrl}/todo/${todo.id}` : `${environment.apiUrl}/todo`;
+            const url = todo.id ? `/todo/${todo.id}` : `/todo`;
 
             const resp = await this.httpClient[method]<DataResponse<TodoResponse>>(url, todo);
 
@@ -75,7 +77,7 @@ export class TodoService {
                 throw new Error('Invalid todo item');
             }
 
-            const resp = await this.httpClient.delete<DataResponse<TodoResponse>>(`${environment.apiUrl}/todo/${todo.id}`);
+            const resp = await this.httpClient.delete<DataResponse<TodoResponse>>(`/todo/${todo.id}`);
 
             if (!resp || !resp.data) {
                 throw new Error('Failed to delete todo: Invalid response from server');
